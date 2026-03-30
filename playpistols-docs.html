@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pistols at Dawn — How to Play</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0c0a09;
+    --bg2: #1c1917;
+    --bg3: #292524;
+    --surface: #1a1714;
+    --border: #3d3630;
+    --gold: #f59e0b;
+    --gold-dim: #92600a;
+    --amber: #d97706;
+    --red: #ef4444;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --purple: #a855f7;
+    --text: #fafaf9;
+    --text2: #a8a29e;
+    --text3: #78716c;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:2rem;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,158,11,.08) 0%, transparent 70%),
+      var(--bg);
+    overflow:hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Cpath d='M30 0v60M0 30h60' stroke='%23ffffff08' stroke-width='.5'/%3E%3C/svg%3E");
+    opacity:.4;
+  }
+
+  .hero-badge {
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.4rem 1rem;
+    border:1px solid var(--border);
+    border-radius:999px;
+    font-size:.8rem;
+    color:var(--gold);
+    background:var(--bg2);
+    margin-bottom:1.5rem;
+    letter-spacing:.05em;
+  }
+  .hero-badge .dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  .hero h1 {
+    position:relative;
+    font-family:'Cinzel',serif;
+    font-size:clamp(2.4rem,6vw,5rem);
+    font-weight:800;
+    background:linear-gradient(135deg,#fbbf24,#f59e0b,#d97706);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    line-height:1.15;
+    margin-bottom:.5rem;
+  }
+  .hero .tagline {
+    position:relative;
+    font-family:'Cinzel',serif;
+    font-size:clamp(1rem,2.2vw,1.4rem);
+    color:var(--text3);
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    margin-bottom:1.5rem;
+  }
+  .hero p {
+    position:relative;
+    font-size:1.15rem;
+    color:var(--text2);
+    max-width:520px;
+    margin-bottom:2.5rem;
+  }
+
+  .hero-buttons { position:relative; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+  .btn {
+    display:inline-flex;align-items:center;gap:.5rem;
+    padding:.75rem 1.8rem;
+    border-radius:8px;
+    font-weight:600;font-size:.95rem;
+    text-decoration:none;
+    transition:all .2s;
+    cursor:pointer;border:none;
+  }
+  .btn-primary { background:var(--gold);color:#000; }
+  .btn-primary:hover { background:#fbbf24;transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,158,11,.3); }
+  .btn-secondary { background:var(--bg3);color:var(--text);border:1px solid var(--border); }
+  .btn-secondary:hover { border-color:var(--gold-dim);background:var(--bg2); }
+  .btn-gold-outline {
+    background:transparent;
+    color:var(--gold);
+    border:2px solid var(--gold);
+    position:relative;
+    overflow:hidden;
+    z-index:1;
+  }
+  .btn-gold-outline::before {
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--gold),var(--amber));
+    opacity:0;transition:opacity .25s;z-index:-1;
+  }
+  .btn-gold-outline:hover { color:#000;transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,158,11,.25); }
+  .btn-gold-outline:hover::before { opacity:1; }
+
+  /* ── Nav ── */
+  nav {
+    position:sticky;top:0;z-index:100;
+    background:rgba(12,10,9,.85);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:.8rem 2rem;
+    display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;
+  }
+  nav a {
+    color:var(--text2);text-decoration:none;font-size:.85rem;font-weight:500;
+    transition:color .2s;letter-spacing:.02em;
+  }
+  nav a:hover { color:var(--gold); }
+
+  /* ── Sections ── */
+  section { max-width:860px; margin:0 auto; padding:5rem 1.5rem; }
+  section h2 {
+    font-family:'Cinzel',serif;
+    font-size:1.8rem;font-weight:600;
+    color:var(--gold);
+    margin-bottom:.5rem;
+  }
+  section h3 {
+    font-size:1.15rem;font-weight:600;
+    color:var(--text);
+    margin:2rem 0 .75rem;
+  }
+  section > .subtitle { color:var(--text2);margin-bottom:2.5rem;font-size:1rem; }
+  .divider { width:60px;height:2px;background:var(--gold-dim);margin-bottom:2.5rem; }
+  p + p { margin-top:1rem; }
+
+  /* ── Cards ── */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.25rem; margin:1.5rem 0; }
+  .card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:1.5rem;
+    transition:border-color .2s, transform .2s;
+  }
+  .card:hover { border-color:var(--gold-dim); transform:translateY(-2px); }
+  .card-icon { font-size:2rem;margin-bottom:.75rem; }
+  .card h4 { font-size:1rem;font-weight:600;margin-bottom:.4rem; }
+  .card p { font-size:.88rem;color:var(--text2);line-height:1.6; }
+
+  /* ── Command box ── */
+  .cmd {
+    font-family:'JetBrains Mono',monospace;
+    font-size:.82rem;
+    background:var(--bg3);
+    padding:.15rem .5rem;
+    border-radius:4px;
+    color:var(--gold);
+    white-space:nowrap;
+  }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x:auto; margin:1.25rem 0; border-radius:10px; border:1px solid var(--border); }
+  table { width:100%;border-collapse:collapse;font-size:.85rem; }
+  th { background:var(--bg3);text-align:left;padding:.7rem 1rem;font-weight:600;color:var(--gold);white-space:nowrap; }
+  td { padding:.65rem 1rem;border-top:1px solid var(--border);color:var(--text2); }
+  tr:hover td { background:rgba(245,158,11,.03); }
+
+  /* ── Callout ── */
+  .callout {
+    border-radius:10px;
+    padding:1rem 1.25rem;
+    margin:1.25rem 0;
+    font-size:.88rem;
+    color:var(--text2);
+  }
+  .callout-tip { background:rgba(245,158,11,.06);border-left:3px solid var(--gold); }
+  .callout-warn { background:rgba(239,68,68,.06);border-left:3px solid var(--red); }
+  .callout-info { background:rgba(59,130,246,.06);border-left:3px solid var(--blue); }
+  .callout strong { color:var(--text); }
+
+  /* ── Accordion ── */
+  details {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin:.75rem 0;
+    overflow:hidden;
+  }
+  summary {
+    padding:1rem 1.25rem;
+    font-weight:600;
+    cursor:pointer;
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    font-size:.95rem;
+    transition:color .2s;
+  }
+  summary:hover { color:var(--gold); }
+  summary::before { content:'▸'; color:var(--gold);transition:transform .2s; }
+  details[open] summary::before { transform:rotate(90deg); }
+  summary::-webkit-details-marker { display:none; }
+  details > div { padding:0 1.25rem 1.25rem; }
+  details > div p { font-size:.88rem;color:var(--text2); }
+
+  /* ── Mode Badge ── */
+  .mode-badge {
+    display:inline-flex;align-items:center;gap:.4rem;
+    padding:.25rem .7rem;border-radius:6px;
+    font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  }
+  .mode-classic { background:rgba(59,130,246,.15);color:var(--blue); }
+  .mode-pvp { background:rgba(239,68,68,.15);color:var(--red); }
+  .mode-pve { background:rgba(168,85,247,.15);color:var(--purple); }
+
+  /* ── Quick Start Steps ── */
+  .quick-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:1.5rem 0; counter-reset:qs; }
+  .qs {
+    counter-increment:qs;
+    position:relative;
+    padding:1.5rem 1.25rem 1.25rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    text-align:center;
+  }
+  .qs::before {
+    content:counter(qs);
+    display:block;
+    width:32px;height:32px;margin:0 auto .75rem;
+    background:var(--gold);color:#000;
+    font-weight:700;font-size:.85rem;
+    line-height:32px;border-radius:50%;
+  }
+  .qs h4 { font-size:.9rem;margin-bottom:.35rem; }
+  .qs p { font-size:.82rem;color:var(--text2); }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:1.5rem;
+    margin:1.5rem 0;
+    font-size:.85rem;
+    color:var(--text2);
+    line-height:2;
+    overflow-x:auto;
+  }
+  .flow .arrow { color:var(--gold);margin:0 .25rem; }
+  .flow .node { color:var(--text);font-weight:600; }
+  .flow .dim { color:var(--text3); }
+
+  /* ── Stat Bar ── */
+  .stat-row { display:flex; align-items:center; gap:.75rem; padding:.6rem 0; border-bottom:1px solid var(--border); font-size:.88rem; }
+  .stat-row:last-child { border-bottom:none; }
+  .stat-icon { font-size:1.2rem; width:28px; text-align:center; }
+  .stat-name { font-weight:600; width:80px; }
+  .stat-desc { color:var(--text2); flex:1; }
+
+  /* ── Gear Grid ── */
+  .gear-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:.75rem; margin:1rem 0; }
+  .gear-item {
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:.75rem;
+    text-align:center;
+    font-size:.82rem;
+  }
+  .gear-item .emoji { font-size:1.5rem;display:block;margin-bottom:.35rem; }
+  .gear-item .slot { font-weight:600;color:var(--text); }
+  .gear-item .stat { color:var(--text3);font-size:.75rem; }
+
+  /* ── Tier Pills ── */
+  .tier-row { display:flex; flex-wrap:wrap; gap:.6rem; margin:1rem 0; }
+  .tier-pill {
+    display:inline-flex;align-items:center;gap:.4rem;
+    padding:.35rem .75rem;border-radius:8px;
+    font-size:.8rem;font-weight:600;
+    background:var(--bg2);border:1px solid var(--border);
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align:center;
+    padding:3rem 1rem;
+    border-top:1px solid var(--border);
+    color:var(--text3);
+    font-size:.82rem;
+  }
+  footer a { color:var(--gold);text-decoration:none; }
+
+  @media(max-width:640px) {
+    nav { gap:1rem;padding:.6rem 1rem; }
+    section { padding:3rem 1rem; }
+    .quick-steps { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> Live on Discord</div>
+  <h1>Pistols at Dawn</h1>
+  <div class="tagline">Draw. Shoot. Survive.</div>
+  <p>Three game modes, one Discord bot. Challenge friends, outsmart rivals, or survive solo in the Gauntlet.</p>
+  <div class="hero-buttons">
+    <a class="btn btn-primary" href="#quickstart" onclick="document.getElementById('quickstart').scrollIntoView({behavior:'smooth'});return false;">🎮 How to Play</a>
+    <a class="btn btn-secondary" href="#invite" onclick="document.getElementById('invite').scrollIntoView({behavior:'smooth'});return false;">🏠 Add to Your Server</a>
+    <a class="btn btn-gold-outline" href="https://pistols.gg/" target="_blank" rel="noopener">🌐 pistols.gg</a>
+  </div>
+</div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <a href="#quickstart" onclick="document.getElementById('quickstart').scrollIntoView({behavior:'smooth'});return false;">Quick Start</a>
+  <a href="#modes" onclick="document.getElementById('modes').scrollIntoView({behavior:'smooth'});return false;">Game Modes</a>
+  <a href="#classic" onclick="document.getElementById('classic').scrollIntoView({behavior:'smooth'});return false;">Classic</a>
+  <a href="#pvp" onclick="document.getElementById('pvp').scrollIntoView({behavior:'smooth'});return false;">PvP</a>
+  <a href="#gauntlet" onclick="document.getElementById('gauntlet').scrollIntoView({behavior:'smooth'});return false;">Gauntlet</a>
+  <a href="#wallet" onclick="document.getElementById('wallet').scrollIntoView({behavior:'smooth'});return false;">Wallet</a>
+  <a href="#commands" onclick="document.getElementById('commands').scrollIntoView({behavior:'smooth'});return false;">Commands</a>
+  <a href="#invite" onclick="document.getElementById('invite').scrollIntoView({behavior:'smooth'});return false;">Add to Server</a>
+  <a href="https://pistols.gg/" target="_blank" rel="noopener" style="color:var(--gold);">pistols.gg ↗</a>
+</nav>
+
+<!-- ═══════════════ QUICK START ═══════════════ -->
+<section id="quickstart">
+  <h2>Quick Start</h2>
+  <p class="subtitle">Get dueling in under a minute.</p>
+  <div class="divider"></div>
+
+  <div class="quick-steps">
+    <div class="qs">
+      <h4>Join the Server</h4>
+      <p>Hop into the Discord server where the Pistols bot is active.</p>
+    </div>
+    <div class="qs">
+      <h4>Link Your Identity</h4>
+      <p>Use <span class="cmd">/profile</span> to link your duelist ID. Optionally <span class="cmd">/login</span> for wallet features.</p>
+    </div>
+    <div class="qs">
+      <h4>Pick Your Mode</h4>
+      <p>Classic, PvP, or Gauntlet — each plays differently. Read on for the rules.</p>
+    </div>
+    <div class="qs">
+      <h4>Start a Duel!</h4>
+      <p>Type <span class="cmd">/duel @someone</span> or <span class="cmd">/adventure start</span> and let the bullets fly.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <strong>💡 Tip:</strong> All your duel choices are <strong>ephemeral</strong> — only you see them. Your opponent can't peek at your cards!
+  </div>
+</section>
+
+<!-- ═══════════════ MODES OVERVIEW ═══════════════ -->
+<section id="modes">
+  <h2>Choose Your Weapon</h2>
+  <p class="subtitle">Three ways to duel — from quick showdowns to deep roguelike runs.</p>
+  <div class="divider"></div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">⚔️</div>
+      <span class="mode-badge mode-classic">Classic</span>
+      <h4 style="margin-top:.75rem">One Shot, One Reveal</h4>
+      <p>Both players secretly pick 4 cards. Moves reveal simultaneously and resolve in one dramatic sequence. Fast, tense, and deadly.</p>
+      <p style="margin-top:.5rem;font-size:.8rem;color:var(--text3);">❤️❤️❤️ 3 HP • 2 players</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔫</div>
+      <span class="mode-badge mode-pvp">PvP</span>
+      <h4 style="margin-top:.75rem">Turn-Based Tactics</h4>
+      <p>Take alternating turns, play fire cards and tactics from your hand. Crits, streaks, and comeback mechanics keep it tense until the last bullet.</p>
+      <p style="margin-top:.5rem;font-size:.8rem;color:var(--text3);">❤️❤️❤️❤️ 4 HP • 2 players</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏜️</div>
+      <span class="mode-badge mode-pve">Gauntlet</span>
+      <h4 style="margin-top:.75rem">Solo Roguelike</h4>
+      <p>Infinite floors, escalating enemies, gear drops, stat upgrades, and hazards. One life per run — survive as long as you can.</p>
+      <p style="margin-top:.5rem;font-size:.8rem;color:var(--text3);">💀 Permadeath • Solo</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CLASSIC ═══════════════ -->
+<section id="classic">
+  <h2>⚔️ Classic Mode</h2>
+  <p class="subtitle">Sealed simultaneous duel — pick your cards, pray, and reveal.</p>
+  <div class="divider"></div>
+
+  <h3>How It Works</h3>
+  <p>Type <span class="cmd">/duel @opponent classic</span>. Your opponent clicks <strong>Accept</strong>. Both of you get a <strong>secret menu</strong> (only you can see it) to pick 4 cards. Once both players confirm, the bot reveals everything and resolves the duel step-by-step in the channel.</p>
+
+  <h3>Your 4 Cards</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Card</th><th>What You Pick</th><th>How It Works</th></tr></thead>
+      <tbody>
+        <tr><td>🔫 Fire Pace</td><td>1 – 10</td><td>Higher pace = better hit chance (pace 1 ≈ 50%, pace 10 ≈ 95%)</td></tr>
+        <tr><td>🛡️ Dodge Pace</td><td>1 – 10</td><td>If your dodge ≤ opponent's fire pace, you dodge before they shoot</td></tr>
+        <tr><td>🃏 Tactics</td><td>Pick one card</td><td>Buffs, debuffs, or chaos effects (see below)</td></tr>
+        <tr><td>⚔️ Blades</td><td>Pick one weapon</td><td>Used if pistols don't finish it — rock-paper-scissors melee</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Tactics Cards</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Card</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>🚫 None</td><td>No special effect</td></tr>
+        <tr><td>⚡ Insult</td><td>Rattles your opponent — reduces their fire accuracy</td></tr>
+        <tr><td>🪙 Coin Toss</td><td>Random chance for a bonus effect</td></tr>
+        <tr><td>😤 Vengeful</td><td>Boost your damage if you get hit</td></tr>
+        <tr><td>🧥 Thick Coat</td><td>Absorb some incoming damage</td></tr>
+        <tr><td>🔄 Reversal</td><td>Turn your opponent's tactics against them</td></tr>
+        <tr><td>🍌 Bananas</td><td>Both players suffer reduced accuracy — pure chaos</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Blades (Melee Tiebreaker)</h3>
+  <p>If pistols don't settle it, blades come out. It's rock-paper-scissors:</p>
+  <div class="flow">
+    <span class="node">🔫 Pocket Pistol</span> <span class="arrow">beats</span>
+    <span class="node">⚔️ Behead</span> <span class="arrow">beats</span>
+    <span class="node">🤼 Grapple</span> <span class="arrow">beats</span>
+    <span class="node">🔫 Pocket Pistol</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <strong>⚠️ Seppuku</strong> is also an option — you attempt a dramatic self-sacrifice. 20% chance you merely wound yourself. Otherwise... you die by your own hand. High risk, maximum drama.
+  </div>
+
+  <details>
+    <summary>🧠 Strategy Tips</summary>
+    <div>
+      <p><strong>Low fire pace</strong> is risky but can dodge high-pace opponents. <strong>High fire pace</strong> almost always hits, but you're vulnerable to early dodges.</p>
+      <p>Pick your dodge to counter what you <em>think</em> your opponent will choose. It's a mind game — that's the whole point.</p>
+      <p>Blades are only relevant if pistols don't finish it, so don't overthink them unless you expect a close duel.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ═══════════════ PVP ═══════════════ -->
+<section id="pvp">
+  <h2>🔫 PvP Mode</h2>
+  <p class="subtitle">Turn-based tactical duel — play your hand, outthink your rival.</p>
+  <div class="divider"></div>
+
+  <h3>How It Works</h3>
+  <p>Type <span class="cmd">/duel @opponent pvp</span>. Once accepted, you take <strong>alternating turns</strong> using Discord buttons on a public embed. Each turn, play one card from your hand — either shoot or use a tactics ability. Use <span class="cmd">/pvp hand</span> to check your remaining cards at any time.</p>
+
+  <h3>Your Hand</h3>
+  <div class="card-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="card">
+      <div class="card-icon">🔫</div>
+      <h4>Fire Cards (3 total)</h4>
+      <p><strong>Pace 3</strong> — lower accuracy<br><strong>Pace 6</strong> — balanced<br><strong>Pace 9</strong> — high accuracy</p>
+      <p style="margin-top:.5rem;font-size:.8rem;color:var(--text3);">Hit% = 50 + (pace−1) × 5</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🃏</div>
+      <h4>Tactics Cards (7 total)</h4>
+      <p>Insult · Vengeful · Reversal · Bananas · Spare Round · Gambit · Dead Eye</p>
+      <p style="margin-top:.5rem;font-size:.8rem;color:var(--text3);">Each can only be used once</p>
+    </div>
+  </div>
+
+  <h3>Tactics Breakdown</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Card</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td>⚡ Insult</td><td>Enemy's next fire gets <strong>-10% hit chance</strong></td></tr>
+        <tr><td>😤 Vengeful</td><td>Your next fire deals <strong>+1 damage</strong></td></tr>
+        <tr><td>🔄 Reversal</td><td>Next debuff aimed at you <strong>becomes a buff</strong> instead</td></tr>
+        <tr><td>🍌 Bananas</td><td>Both players get <strong>-10% on next fire</strong></td></tr>
+        <tr><td>♻️ Spare Round</td><td>Get back a <strong>spent fire card</strong></td></tr>
+        <tr><td>🎲 Gambit</td><td>50/50 — <strong>+2 dmg next fire</strong> or <strong>take 1 damage</strong></td></tr>
+        <tr><td>🎯 Dead Eye</td><td>Next shot <strong>cannot miss</strong> (but can't crit)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Bonus Mechanics</h3>
+  <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">💥</div>
+      <h4>Critical Hit</h4>
+      <p>20% chance on every hit for <strong>+1 bonus damage</strong></p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">💀</div>
+      <h4>Last Stand</h4>
+      <p>At 1 HP, gain <strong>+20% hit chance</strong> on all shots</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">🔥</div>
+      <h4>On Fire</h4>
+      <p>2 hits in a row = next fire gets <strong>+20% hit & auto-crit</strong></p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">🏁</div>
+      <h4>Auto-Resolve</h4>
+      <p>Both decks empty? <strong>Most HP wins</strong></p>
+    </div>
+  </div>
+
+  <details>
+    <summary>🧠 Strategy Tips</summary>
+    <div>
+      <p><strong>Don't fire all your shots early.</strong> Pace 9 has the best accuracy — save it for when buffs or Last Stand can amplify it.</p>
+      <p><strong>Insult before their big shot.</strong> -10% on a Pace 3 card can be devastating.</p>
+      <p><strong>Spare Round + Vengeful</strong> is a nasty combo: reclaim your best fire card, then boost its damage.</p>
+      <p><strong>Gambit</strong> is high-risk. Best played when you're behind and have nothing to lose.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ═══════════════ GAUNTLET ═══════════════ -->
+<section id="gauntlet">
+  <h2>🏜️ Gauntlet (PVE)</h2>
+  <p class="subtitle">Solo roguelike — one life, infinite floors, escalating danger.</p>
+  <div class="divider"></div>
+
+  <h3>Starting a Run</h3>
+  <p>Type <span class="cmd">/adventure start</span>. You begin at Floor 1 with base stats, no gear, and a handful of HP. Each floor is either a <strong>combat encounter</strong> (65–75% chance) or a <strong>hazard event</strong> (25–35%). Death is permanent — your run ends and everything resets.</p>
+  <p>Use <span class="cmd">/adventure status</span> any time to check your current stats, gear, and floor.</p>
+
+  <h3>Combat Actions</h3>
+  <p>Before combat, you see three options: <strong>⚔️ Fight</strong>, <strong>🏪 Shop</strong>, or <strong>🏃 Flee</strong>. Once in a fight, these are your moves:</p>
+  <div class="card-grid">
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">🔫</div>
+      <h4>Shoot</h4>
+      <p>Hit% = 55 + Aim × 5<br>Crit% = 10 + Nerve × 5</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">🎯</div>
+      <h4>Steady Aim</h4>
+      <p>Skip this turn.<br>Next shot <strong>can't miss</strong>.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">🗣️</div>
+      <h4>Taunt</h4>
+      <p>Skip this turn.<br>Enemy gets <strong>-20% hit</strong> next turn.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <strong>⚠️ The enemy always shoots back</strong> after every action you take — there are no free turns!
+  </div>
+
+  <h3>Enemy Tiers</h3>
+  <p>Enemies get tougher as you descend. HP scales +1 every 3 floors (capped at base +3).</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tier</th><th>Floors</th><th>HP</th><th>Hit%</th><th>Special</th></tr></thead>
+      <tbody>
+        <tr><td>🍺 Drunkard</td><td>1–3</td><td>2</td><td>35%</td><td>Sloppy shots — pure random</td></tr>
+        <tr><td>🔪 Bandit</td><td>4–6</td><td>3</td><td>50%</td><td>Crits deal +2 damage</td></tr>
+        <tr><td>🕵️ Bounty Hunter</td><td>7–9</td><td>4</td><td>55%</td><td>25% chance to steady aim</td></tr>
+        <tr><td>💀 Legendary Outlaw</td><td>10+</td><td>6</td><td>65%</td><td>20% chance to taunt you</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Your Stats</h3>
+  <p>You start with base stats and level up by getting kills. Every <strong>3 kills</strong> you pick 1 of 3 random stat upgrades.</p>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin:1.25rem 0;">
+    <div class="stat-row"><span class="stat-icon">🎯</span><span class="stat-name">Aim</span><span class="stat-desc">+5% hit per point — your core damage stat</span></div>
+    <div class="stat-row"><span class="stat-icon">😤</span><span class="stat-name">Nerve</span><span class="stat-desc">+5% crit per point — big hits when they land</span></div>
+    <div class="stat-row"><span class="stat-icon">⚡</span><span class="stat-name">Reflex</span><span class="stat-desc">-5% enemy hit per point, +10% flee chance, softens ambush hazards</span></div>
+    <div class="stat-row"><span class="stat-icon">🛡️</span><span class="stat-name">Grit</span><span class="stat-desc">+1 max HP per point, softens heat & brawl hazards</span></div>
+    <div class="stat-row"><span class="stat-icon">🧠</span><span class="stat-name">Cunning</span><span class="stat-desc">Passively soaks 1 damage per point on all hazards</span></div>
+    <div class="stat-row"><span class="stat-icon">🍀</span><span class="stat-name">Luck</span><span class="stat-desc">Avoids rattlesnakes, powder kegs, and bad omens</span></div>
+  </div>
+
+  <h3>Gear System</h3>
+  <p>Enemies drop gear (25–40% chance). Each piece has a rarity tier and boosts a specific stat. You can also buy gear from the <strong>🏪 Shop</strong> before each fight.</p>
+
+  <div class="gear-grid">
+    <div class="gear-item"><span class="emoji">🔫</span><span class="slot">Weapon</span><br><span class="stat">→ Aim</span></div>
+    <div class="gear-item"><span class="emoji">🧤</span><span class="slot">Gloves</span><br><span class="stat">→ Aim</span></div>
+    <div class="gear-item"><span class="emoji">🎩</span><span class="slot">Head</span><br><span class="stat">→ Grit</span></div>
+    <div class="gear-item"><span class="emoji">🧥</span><span class="slot">Chest</span><br><span class="stat">→ Grit</span></div>
+    <div class="gear-item"><span class="emoji">🪢</span><span class="slot">Belt</span><br><span class="stat">→ Grit</span></div>
+    <div class="gear-item"><span class="emoji">👢</span><span class="slot">Boots</span><br><span class="stat">→ Reflex</span></div>
+    <div class="gear-item"><span class="emoji">📿</span><span class="slot">Necklace</span><br><span class="stat">→ Cunning</span></div>
+    <div class="gear-item"><span class="emoji">💍</span><span class="slot">Ring</span><br><span class="stat">→ Nerve</span></div>
+  </div>
+
+  <h3>Gear Rarity</h3>
+  <div class="tier-row">
+    <span class="tier-pill">🟤 Worn — +1 (10 coins)</span>
+    <span class="tier-pill">⚪ Common — +1 (20 coins)</span>
+    <span class="tier-pill">🔵 Uncommon — +2 (35 coins)</span>
+    <span class="tier-pill">🟣 Rare — +2 (55 coins)</span>
+    <span class="tier-pill">🟡 Legendary — +3 (80 coins)</span>
+  </div>
+
+  <h3>Hazard Events</h3>
+  <p>Some floors throw hazards instead of enemies. Each checks a specific stat — fail and you take damage. Your <strong>Cunning</strong> passively soaks 1 damage per point on all hazards (except Cunning-check hazards).</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Hazard</th><th>Survive With</th><th>Fail Dmg</th><th>Appears</th></tr></thead>
+      <tbody>
+        <tr><td>🐍 Rattlesnake</td><td>Luck ≥ 1</td><td>1</td><td>Floor 1+</td></tr>
+        <tr><td>💨 Dust Storm</td><td>Cunning ≥ 1</td><td>1</td><td>Floor 1+</td></tr>
+        <tr><td>🏚️ Rotten Floorboards</td><td>Reflex ≥ 1</td><td>1</td><td>Floor 1+</td></tr>
+        <tr><td>☀️ Desert Heat</td><td>Grit ≥ 1</td><td>1</td><td>Floor 1+</td></tr>
+        <tr><td>🔫 Stray Bullet</td><td>Reflex ≥ 2</td><td>2</td><td>Floor 2+</td></tr>
+        <tr><td>🍺 Bar Brawl</td><td>Grit ≥ 2</td><td>2</td><td>Floor 2+</td></tr>
+        <tr><td>💣 Powder Keg</td><td>Luck ≥ 2</td><td>2</td><td>Floor 3+</td></tr>
+        <tr><td>🕵️ Ambush</td><td>Reflex ≥ 3</td><td>2</td><td>Floor 4+</td></tr>
+        <tr><td>📜 Bounty Hunters</td><td>Cunning ≥ 2</td><td>2</td><td>Floor 4+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Floor Progression</h3>
+  <div class="flow">
+    <span class="node">New Floor</span> <span class="arrow">→</span>
+    <span class="dim">roll encounter type</span> <span class="arrow">→</span>
+    <span class="node">Combat</span> or <span class="node">Hazard</span><br><br>
+    <span class="dim">If combat:</span> <span class="node">⚔️ Fight</span> / <span class="node">🏪 Shop</span> / <span class="node">🏃 Flee</span><br>
+    <span class="dim" style="padding-left:1rem;">→ Victory:</span> <span class="node">Rep + Coins</span> <span class="arrow">→</span> <span class="node">Loot?</span> <span class="arrow">→</span> <span class="node">Level Up?</span> <span class="arrow">→</span> <span class="node">15% Heal</span> <span class="arrow">→</span> <span class="node">Next Floor</span><br>
+    <span class="dim" style="padding-left:1rem;">→ Death:</span> <span class="node" style="color:var(--red);">Run Over 💀</span><br><br>
+    <span class="dim">If hazard:</span> <span class="node">Stat Check</span> <span class="arrow">→</span> <span class="dim">pass/fail</span> <span class="arrow">→</span> <span class="node">Continue</span>
+  </div>
+
+  <details>
+    <summary>🧠 Gauntlet Strategy Tips</summary>
+    <div>
+      <p><strong>Early floors (1–3):</strong> Drunkards are weak. Save your coins and don't buy from the shop unless something great shows up.</p>
+      <p><strong>Prioritize Grit early.</strong> +1 max HP per point keeps you alive through bad RNG. Cunning is secretly amazing — free damage soak on every hazard.</p>
+      <p><strong>Steady Aim is your best friend</strong> against Bounty Hunters and Outlaws. Skip one turn for a guaranteed hit next turn.</p>
+      <p><strong>Flee is risky.</strong> If you fail, you take 1 damage AND still have to fight. Only flee if your HP is critical and the enemy looks deadly.</p>
+      <p><strong>Don't skip loot.</strong> Gear bonuses stack and compound with your base stats. A Legendary Weapon (+3 Aim = +15% hit) is game-changing.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ═══════════════ WALLET ═══════════════ -->
+<section id="wallet">
+  <h2>💰 Wallet & Identity</h2>
+  <p class="subtitle">Link your on-chain identity for balances and leaderboards.</p>
+  <div class="divider"></div>
+
+  <div class="card-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <h4>Link Your Profile</h4>
+      <p>Use <span class="cmd">/profile</span> to connect your duelist ID to your Discord account. This lets the bot show your name on leaderboards and stats.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <h4>Link Your Wallet</h4>
+      <p>Use <span class="cmd">/login &lt;username&gt;</span> with your Cartridge Controller username. The bot verifies it matches your Discord. Then use <span class="cmd">/balance</span> to check tokens.</p>
+    </div>
+  </div>
+
+  <h3>What You Can Check</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Shows</th></tr></thead>
+      <tbody>
+        <tr><td><span class="cmd">/balance</span></td><td>Live STRK, LORDS, FOOLS & FAME token balances from Starknet</td></tr>
+        <tr><td><span class="cmd">/leaderboard</span></td><td>Top 10 duelists on-chain</td></tr>
+        <tr><td><span class="cmd">/stats</span></td><td>Your individual duelist stats</td></tr>
+        <tr><td><span class="cmd">/duelists</span></td><td>All active duelists</td></tr>
+        <tr><td><span class="cmd">/season</span></td><td>Current season totals</td></tr>
+        <tr><td><span class="cmd">/status</span></td><td>Game server status</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ ALL COMMANDS ═══════════════ -->
+<section id="commands">
+  <h2>All Commands</h2>
+  <p class="subtitle">Everything you can type.</p>
+  <div class="divider"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr style="border-top:2px solid var(--border);"><td colspan="2" style="color:var(--gold);font-weight:600;font-size:.8rem;letter-spacing:.05em;padding-top:1rem;">DUELING</td></tr>
+        <tr><td><span class="cmd">/duel @user classic</span></td><td>Challenge to a Classic duel</td></tr>
+        <tr><td><span class="cmd">/duel @user pvp</span></td><td>Challenge to a PvP duel</td></tr>
+        <tr><td><span class="cmd">/pvp hand</span></td><td>View your current PvP hand (private)</td></tr>
+        <tr><td><span class="cmd">/pvp status</span></td><td>Check PvP duel state</td></tr>
+
+        <tr style="border-top:2px solid var(--border);"><td colspan="2" style="color:var(--purple);font-weight:600;font-size:.8rem;letter-spacing:.05em;padding-top:1rem;">GAUNTLET</td></tr>
+        <tr><td><span class="cmd">/adventure start</span></td><td>Begin a new solo Gauntlet run</td></tr>
+        <tr><td><span class="cmd">/adventure status</span></td><td>Check your stats, gear & floor</td></tr>
+
+        <tr style="border-top:2px solid var(--border);"><td colspan="2" style="color:var(--blue);font-weight:600;font-size:.8rem;letter-spacing:.05em;padding-top:1rem;">IDENTITY & WALLET</td></tr>
+        <tr><td><span class="cmd">/profile</span></td><td>Link your duelist ID to Discord</td></tr>
+        <tr><td><span class="cmd">/login &lt;username&gt;</span></td><td>Link your Cartridge Controller wallet</td></tr>
+        <tr><td><span class="cmd">/balance</span></td><td>View STRK, LORDS, FOOLS & FAME balances</td></tr>
+
+        <tr style="border-top:2px solid var(--border);"><td colspan="2" style="color:var(--green);font-weight:600;font-size:.8rem;letter-spacing:.05em;padding-top:1rem;">INFO & LEADERBOARDS</td></tr>
+        <tr><td><span class="cmd">/leaderboard</span></td><td>Top 10 duelists on-chain</td></tr>
+        <tr><td><span class="cmd">/stats</span></td><td>Individual duelist stats</td></tr>
+        <tr><td><span class="cmd">/duelists</span></td><td>All active duelists</td></tr>
+        <tr><td><span class="cmd">/season</span></td><td>Current season totals</td></tr>
+        <tr><td><span class="cmd">/status</span></td><td>Game server status</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ ADD TO SERVER ═══════════════ -->
+<section id="invite">
+  <h2>🏠 Add to Your Server</h2>
+  <p class="subtitle">Bring Pistols at Dawn to your own community.</p>
+  <div class="divider"></div>
+
+  <div class="callout callout-info">
+    <strong>Who is this for?</strong> Discord server admins or moderators who want to install the bot in their community so members can duel each other directly.
+  </div>
+
+  <h3>How to Invite</h3>
+  <div class="quick-steps">
+    <div class="qs">
+      <h4>Get the Invite Link</h4>
+      <p>Ask for the official invite link in the <strong>Pistols at Dawn</strong> Discord, or check pinned messages in the bot channel.</p>
+    </div>
+    <div class="qs">
+      <h4>Authorize the Bot</h4>
+      <p>Click the link, select your server from the dropdown, and click <strong>Authorize</strong>. You need <strong>Manage Server</strong> permission.</p>
+    </div>
+    <div class="qs">
+      <h4>Done!</h4>
+      <p>Slash commands register automatically. Your members can start dueling right away with <span class="cmd">/duel</span> and <span class="cmd">/adventure</span>.</p>
+    </div>
+  </div>
+
+  <h3>Bot Permissions</h3>
+  <p>When you authorize the bot, it will request these permissions. All are required for the bot to function properly:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Permission</th><th>Why It's Needed</th></tr></thead>
+      <tbody>
+        <tr><td>Send Messages</td><td>Post duel results, combat turns, and announcements</td></tr>
+        <tr><td>Embed Links</td><td>Rich embeds for duel cards, leaderboards, and gear displays</td></tr>
+        <tr><td>Use External Emojis</td><td>Display custom card and stat icons</td></tr>
+        <tr><td>Read Message History</td><td>Edit existing duel embeds during turn-based modes</td></tr>
+        <tr><td>Use Slash Commands</td><td>Register and respond to all <span class="cmd">/commands</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Optional: Duel Notification Channel</h3>
+  <p>The bot can automatically post when on-chain duels are resolved on <a href="https://pistols.gg/" target="_blank" style="color:var(--gold);">pistols.gg</a>. To enable this, ask a Pistols admin to configure a notification channel for your server. The bot will then post live results there every time a duel finishes on-chain.</p>
+
+  <h3>Frequently Asked Questions</h3>
+
+  <details>
+    <summary>Does the bot cost anything?</summary>
+    <div><p>No — the bot is completely free to add and use. All game modes (Classic, PvP, Gauntlet) work out of the box.</p></div>
+  </details>
+
+  <details>
+    <summary>Do my members need a Starknet wallet to play?</summary>
+    <div><p><strong>No.</strong> The prototype duels (Classic, PvP, Gauntlet) are fully off-chain and run directly in Discord. No wallet, no gas fees, no tokens needed. Wallets are only needed for on-chain features like <span class="cmd">/balance</span> and <span class="cmd">/login</span>.</p></div>
+  </details>
+
+  <details>
+    <summary>Can players from different servers duel each other?</summary>
+    <div><p>Duels happen within the server where the command is used. Both players need to be in the same server. However, player profiles and wallet links carry across servers since they're tied to your Discord ID.</p></div>
+  </details>
+
+  <details>
+    <summary>Can I restrict the bot to specific channels?</summary>
+    <div><p>Yes — use Discord's built-in channel permissions. Go to the channel settings → Permissions → deny the bot's role access in channels you want to keep clean, and allow it only in your designated game or bot channels.</p></div>
+  </details>
+
+  <details>
+    <summary>What if the bot goes offline?</summary>
+    <div><p>Active duels and Gauntlet runs are saved automatically. When the bot comes back online, players can pick up where they left off — no progress is lost.</p></div>
+  </details>
+
+  <details>
+    <summary>How do I get help or report a bug?</summary>
+    <div><p>Head to the official <strong>Pistols at Dawn</strong> Discord server and post in the support or bug-report channel. The dev team is active and responsive.</p></div>
+  </details>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <p style="font-size:1.5rem;margin-bottom:.5rem;">⚔️</p>
+  <p><strong style="color:var(--text);">Pistols at Dawn</strong> — On-chain dueling on <a href="https://www.starknet.io" target="_blank" rel="noopener">Starknet</a></p>
+  <p style="margin-top:.75rem;">
+    <a href="https://pistols.gg/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1.2rem;border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold);font-weight:600;font-size:.85rem;transition:all .2s;">🌐 Play at pistols.gg ↗</a>
+  </p>
+  <p style="margin-top:1rem;font-size:.75rem;color:var(--text3);">Made with ⚡ by the Pistols community</p>
+</footer>
+
+</body>
+</html>
